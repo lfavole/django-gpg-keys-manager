@@ -1,0 +1,38 @@
+{% extends "gpg_keys/base.html" %}
+{% block content %}
+<h1>{% trans "Public keys" %}</h1>
+<h2>{% trans "Search for public keys" %}</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ search_public_keys_form.as_p }}
+    <p>
+        <input type="submit" name="search" value="{% trans "Search for public keys" %}">
+    </p>
+</form>
+<h2>{% trans "Add found public keys" %}</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ add_temporary_public_keys_form.as_p }}
+    <p>
+        <input type="submit" name="add_temporary" value="{% trans "Add found public keys" %}">
+    </p>
+</form>
+<h2>{% trans "Manage" %}</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ manage_public_keys_form.as_p }}
+    <p>
+        <input type="submit" name="remove" value="{% trans "Remove" %}">
+        <input type="submit" name="verify" value="{% trans "Verify" %}">
+        <input type="submit" name="primary" value="{% trans "Make primary" %}">
+    </p>
+</form>
+<h2>{% trans "Add" %}</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ add_public_key_form.as_p }}
+    <p>
+        <input type="submit" name="add" value="{% trans "OK" %}">
+    </p>
+</form>
+{% endblock %}

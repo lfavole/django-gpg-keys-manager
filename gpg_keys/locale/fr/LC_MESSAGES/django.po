@@ -1,0 +1,220 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-29 12:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: gpg_keys/common_views.py:163
+msgid "No action selected."
+msgstr "Aucune action sélectionnée."
+
+#: gpg_keys/forms.py:24 gpg_keys/models.py:25
+msgid "Public key"
+msgstr "Clé publique"
+
+#: gpg_keys/forms.py:32
+#, python-format
+msgid "Invalid public key: %s"
+msgstr "Clé publique invalide : %s"
+
+#: gpg_keys/forms.py:47
+#, python-format
+msgid ""
+"This key contains the following unverified email addresses:\n"
+"%s"
+msgstr ""
+"Cette clé contient les adresses mail non vérifiées suivantes :\n"
+"%s"
+
+#: gpg_keys/forms.py:48
+msgid ", "
+msgstr ", "
+
+#: gpg_keys/forms.py:65
+#, python-format
+msgid "Invalid PGP message: %s"
+msgstr "Message PGP invalide : %s"
+
+#: gpg_keys/forms.py:68
+msgid "The provided message is not signed."
+msgstr "Le message fourni n'est pas signé."
+
+#: gpg_keys/forms.py:71
+msgid "The message has multiple signers, only one is allowed."
+msgstr "Le message a plusieurs signataires, un seul est autorisé."
+
+#: gpg_keys/forms.py:74
+msgid "The message has no signers."
+msgstr "Le message n'a pas de signataires."
+
+#: gpg_keys/models.py:23
+msgid "User"
+msgstr "Utilisateur"
+
+#: gpg_keys/models.py:55
+msgid "GPG key"
+msgstr "Clé GPG"
+
+#: gpg_keys/models.py:56
+msgid "GPG keys"
+msgstr "Clés GPG"
+
+#: gpg_keys/models.py:121
+msgid "The provided key is not a public key."
+msgstr "La clé fournie n'est pas une clé publique."
+
+#: gpg_keys/models.py:146
+msgid "Temporary GPG key"
+msgstr "Clé GPG temporaire"
+
+#: gpg_keys/models.py:147
+msgid "Temporary GPG keys"
+msgstr "Clés GPG temporaires"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:3
+msgid "Public keys"
+msgstr "Clés publiques"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:4
+#: gpg_keys/templates/gpg_keys/public_keys.html:9
+msgid "Search for public keys"
+msgstr "Rechercher des clés publiques"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:12
+#: gpg_keys/templates/gpg_keys/public_keys.html:17
+msgid "Add found public keys"
+msgstr "Ajouter les clés publiques trouvées"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:20
+msgid "Manage"
+msgstr "Gérer"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:25
+msgid "Remove"
+msgstr "Supprimer"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:26
+msgid "Verify"
+msgstr "Vérifier"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:27
+msgid "Make primary"
+msgstr "Rendre primaire"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:30
+msgid "Add"
+msgstr "Ajouter"
+
+#: gpg_keys/templates/gpg_keys/public_keys.html:35
+#: gpg_keys/templates/gpg_keys/verify_key.html:25
+msgid "OK"
+msgstr "OK"
+
+#: gpg_keys/templates/gpg_keys/verify_key.html:3
+#, python-format
+msgid "Verify the key %(key)s"
+msgstr "Vérifier la clé %(key)s"
+
+#: gpg_keys/templates/gpg_keys/verify_key.html:8
+msgid "Option 1: run a command"
+msgstr "Option 1 : exécuter une commande"
+
+#: gpg_keys/templates/gpg_keys/verify_key.html:10
+msgid "Please run this command on your computer:"
+msgstr "Veuillez exécuter cette commande sur votre ordinateur :"
+
+#: gpg_keys/templates/gpg_keys/verify_key.html:14
+msgid "Option 2: manually encrypt the message"
+msgstr "Option 2 : chiffrer manuellement le message"
+
+#: gpg_keys/templates/gpg_keys/verify_key.html:16
+msgid "Please encrypt the message:"
+msgstr "Veuillez chiffrer le message :"
+
+#: gpg_keys/templates/gpg_keys/verify_key.html:18
+msgid "and paste the result here:"
+msgstr "et coller le résultat ici :"
+
+#: gpg_keys/views.py:75
+#, python-format
+msgid "Added %(keys_added)d public key from your verified email address."
+msgid_plural ""
+"Added %(keys_added)d public keys from your verified email addresses."
+msgstr[0] ""
+"%(keys_added)d clé publique a été ajoutée depuis votre adresse mail vérifiée."
+msgstr[1] ""
+"%(keys_added)d clés publiques ont été ajoutées depuis vos adresses mail "
+"vérifiées."
+
+#: gpg_keys/views.py:84
+#, python-format
+msgid "Skipped %(keys_skipped)d already existing public key."
+msgid_plural "Skipped %(keys_skipped)d already existing public keys."
+msgstr[0] "%(keys_skipped)d clé déjà existante a été ignorée."
+msgstr[1] "%(keys_skipped)d clés déjà existantes ont été ignorées."
+
+#: gpg_keys/views.py:102
+msgid "Public key added successfully."
+msgstr "Clé publique ajoutée avec succès."
+
+#: gpg_keys/views.py:110
+msgid "Public key removed successfully."
+msgstr "Clé publique supprimée avec succès."
+
+#: gpg_keys/views.py:119
+msgid "Primary key set successfully."
+msgstr "Clé primaire définie avec succès."
+
+#: gpg_keys/views.py:143 gpg_keys/views.py:267
+#, python-format
+msgid "Key %(key)s verified successfully."
+msgstr "La clé %(key)s a été vérifiée avec succès."
+
+#: gpg_keys/views.py:195 gpg_keys/views.py:213
+#, python-format
+msgid "Key %(key)s is already verified."
+msgstr "La clé %(key)s est déjà vérifiée."
+
+#: gpg_keys/views.py:209
+msgid "The key is already verified, no need to resubmit"
+msgstr "La clé est déjà vérifiée, il n'est pas nécessaire de renvoyer"
+
+#: gpg_keys/views.py:242
+msgid "The message is not signed by the provided key."
+msgstr "Le message n'est pas signé par la clé fournie."
+
+#: gpg_keys/views.py:246
+msgid "No verification message found. Please get one beforehand."
+msgstr ""
+"Aucun message de vérification trouvé. Veuillez en obtenir un au préalable."
+
+#: gpg_keys/views.py:250
+msgid "The message does not match the verification message."
+msgstr "Le message ne correspond pas au message de vérification."
+
+#: gpg_keys/views.py:256
+#, python-format
+msgid "Error during verification: %s"
+msgstr "Erreur lors de la vérification : %s"
+
+#: gpg_keys/views.py:260
+msgid "The signature could not be verified."
+msgstr "La signature n'a pas pu être vérifiée."
+
+#: gpg_keys/views.py:270
+msgid "The key is now verified, check your browser"
+msgstr "La clé est maintenant vérifiée, vérifiez votre navigateur"

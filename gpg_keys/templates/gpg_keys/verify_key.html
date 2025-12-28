@@ -1,0 +1,52 @@
+{% extends "gpg_keys/base.html" %}
+{% block content %}
+<h1>{% blocktrans %}Verify the key {{ key }}{% endblocktrans %}</h1>
+<form class="form" method="POST">
+    {% csrf_token %}
+    <ul>
+        <li>
+            {% trans "Option 1: run a command" %}
+            <br>
+            {% trans "Please run this command on your computer:" %}
+            <pre>{{ key.verification_command }}</pre>
+        </li>
+        <li>
+            {% trans "Option 2: manually encrypt the message" %}
+            <br>
+            {% trans "Please encrypt the message:" %}
+            <pre>{{ key.verification_message }}</pre>
+            {% trans "and paste the result here:" %}
+            <br>
+            {{ form.signed_message.errors }}
+            {{ form.signed_message.label_tag }}
+            {{ form.signed_message }}
+        </li>
+    </ul>
+    <p><input type="submit" value="{% trans "OK" %}"></p>
+</form>
+<script>
+window.addEventListener("DOMContentLoaded", (event) => {
+    var timeout;
+
+    async function updateData() {
+        clearTimeout(timeout);
+
+        try {
+            const response = await fetch("{{ url|escapejs }}?check=1", {headers: {'Accept': 'application/json'}});
+            const data = await response.json();
+
+            if (data.data?.verified) {
+                location.href = "{% url "gpg_keys_list" %}";
+                return;
+            }
+        } catch(e) {
+            console.error(e);
+        }
+
+        timeout = setTimeout(updateData, 5000);
+    }
+
+    updateData();
+});
+</script>
+{% endblock %}

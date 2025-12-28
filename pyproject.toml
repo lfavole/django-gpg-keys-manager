@@ -1,0 +1,16 @@
+[project]
+name = "django-gpg-keys-manager"
+version = "0.1.0"
+description = "Django reusable app to manage GPG public keys."
+authors = [
+    {name = "Laurent FAVOLE", email = "laurentfavole03@gmail.com"},
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "Django>=5.0<7.0",
+    "pgpy13~=0.6",
+]
+
+[tool.vercel.scripts]
+build = "bash build.sh"
