@@ -1,3 +1,5 @@
+"""URL patterns for the gpg_keys app."""
+
 from django.urls import path
 
 from . import views

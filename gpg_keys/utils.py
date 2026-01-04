@@ -1,4 +1,7 @@
+"""Utility functions for GPG key management."""
+
 import inspect
+from http import HTTPStatus
 from urllib.parse import quote, urlparse
 from urllib.request import urlopen
 
@@ -10,11 +13,16 @@ from django.http import HttpRequest
 from .models import GPGKey, TemporaryGPGKey
 
 
-def get_request():
-    """Return the first HttpRequest instance found in stack frames' local variables.
+def get_request() -> HttpRequest | None:
+    """
+    Return the first HttpRequest instance found in stack frames' local variables.
 
     Walks back the call stack looking for a local variable named 'request' that is
-    an instance of `django.http.HttpRequest`. Returns None if not found.
+    an instance of `django.http.HttpRequest`.
+
+    Returns:
+        An HttpRequest instance if found, otherwise None.
+
     """
     frame = inspect.currentframe()
     try:
@@ -33,31 +41,50 @@ def get_request():
 class KeyDownloadError(Exception):
     """Custom exception for key download errors."""
 
-    pass
-
 
 DEFAULT_KEYSERVERS = ["keys.openpgp.org"]
 
 
-def download_key(key_id_or_email, key_server=DEFAULT_KEYSERVERS[0]):
+def download_key(key_id_or_email: str, key_server: str = DEFAULT_KEYSERVERS[0]) -> pgpy.PGPKey:
+    """
+    Download a public GPG key from a keyserver given a key ID or email.
+
+    Args:
+        key_id_or_email: The key ID or email address to search for.
+        key_server: The keyserver URL to use.
+
+    Returns:
+        The downloaded PGPKey object.
+
+    Raises:
+        KeyDownloadError: If the key cannot be downloaded.
+
+    """
     parse_result = urlparse(key_server)
     key_server = parse_result.hostname or parse_result.path
     try:
         with urlopen(f"https://{key_server}/pks/lookup?op=get&options=mr&search={quote(key_id_or_email)}") as response:
-            if response.status == 200:
-                key_data = response.read().decode("utf-8")
-                public_key, _ = pgpy.PGPKey.from_blob(key_data)
-                return public_key  # Return the PGPKey object
-            else:
-                raise KeyDownloadError(f"Failed to download key: HTTP {response.status}")
+            if response.status != HTTPStatus.OK:
+                msg = f"Failed to download key: HTTP {response.status}"
+                raise KeyDownloadError(msg)  # noqa: TRY301
+            key_data = response.read().decode("utf-8")
+            public_key, _ = pgpy.PGPKey.from_blob(key_data)
+            return public_key  # Return the PGPKey object
     except Exception as e:
-        raise KeyDownloadError(f"An error occurred while downloading the key: {str(e)}")
+        msg = f"An error occurred while downloading the key: {e}"
+        raise KeyDownloadError(msg) from e
 
 
-def search_and_add_keys(emails, default_user=None):
-    """Given an iterable of EmailAddress instances or email strings, search keyservers and add TemporaryGPGKey objects.
+def search_and_add_keys(
+    emails: list[str | models.Model] | models.QuerySet,
+    default_user: models.Model | None = None,
+) -> tuple[int, int]:
+    """
+    Given an iterable of EmailAddress instances or email strings, search keyservers and add TemporaryGPGKey objects.
 
-    Returns (keys_added, keys_skipped).
+    Returns:
+        A (keys_added, keys_skipped) tuple.
+
     """
     keys_added = 0
     keys_skipped = 0
@@ -67,7 +94,7 @@ def search_and_add_keys(emails, default_user=None):
         email = str(item)
         user = default_user
         try:
-            from allauth.account.models import EmailAddress
+            from allauth.account.models import EmailAddress  # noqa: PLC0415
         except ImportError:
             pass
         else:
@@ -101,8 +128,14 @@ if "allauth" in settings.INSTALLED_APPS:
     from allauth.account.models import EmailAddress
     from allauth.account.signals import email_added, email_changed, email_removed
 
-    def handle_added_email(query):
-        """Resolve `query` into a queryset of EmailAddress and delegate to search_and_add_keys."""
+    def handle_added_email(query: str | models.Q | list | tuple) -> tuple[int, int]:
+        """
+        Resolve `query` into a queryset of EmailAddress and delegate to search_and_add_keys.
+
+        Returns:
+            A tuple (keys_added, keys_skipped).
+
+        """
         eas = EmailAddress.objects.all()
         if isinstance(query, models.Q):
             eas = eas.filter(query)
@@ -113,7 +146,8 @@ if "allauth" in settings.INSTALLED_APPS:
 
         return search_and_add_keys(eas)
 
-    def handle_removed_email(email_address):
+    def handle_removed_email(email_address: str | EmailAddress) -> None:
+        """Remove any TemporaryGPGKey objects that were associated only with the given email address."""
         if isinstance(email_address, EmailAddress):
             email_address = email_address.email
         # Remove any TemporaryGPGKey that has this email if no EmailAddress exists with this email
@@ -138,7 +172,14 @@ if "allauth" in settings.INSTALLED_APPS:
     email_removed.connect(lambda email_address, **_: handle_removed_email(email_address))
 
 
-def is_xhr(request: HttpRequest):
+def is_xhr(request: HttpRequest) -> bool:
+    """
+    Determine if the request is an XMLHttpRequest (AJAX) or a curl request.
+
+    Returns:
+        True if the request is an XMLHttpRequest or a curl request, False otherwise.
+
+    """
     return (
         request.headers.get("x-requested-with") == "XMLHttpRequest"
         or request.headers.get("accept") == "application/json"
@@ -146,10 +187,24 @@ def is_xhr(request: HttpRequest):
     )
 
 
-def is_curl(request: HttpRequest):
+def is_curl(request: HttpRequest) -> bool:
+    """
+    Determine if the request was made using curl.
+
+    Returns:
+        True if the request was made using curl, False otherwise.
+
+    """
     return request.headers.get("user-agent", "").lower().startswith("curl/")
 
 
-def terminal_border_message(message: str):
+def terminal_border_message(message: str) -> str:
+    """
+    Return a message string wrapped in a border for terminal display.
+
+    Returns:
+        The bordered message string.
+
+    """
     border = "+" + "-" * (len(message) + 2) + "+"
     return f"{border}\n| {message} |\n{border}"

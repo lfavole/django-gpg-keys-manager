@@ -197,11 +197,6 @@ msgstr "La clé est déjà vérifiée, il n'est pas nécessaire de renvoyer"
 msgid "The message is not signed by the provided key."
 msgstr "Le message n'est pas signé par la clé fournie."
 
-#: gpg_keys/views.py:246
-msgid "No verification message found. Please get one beforehand."
-msgstr ""
-"Aucun message de vérification trouvé. Veuillez en obtenir un au préalable."
-
 #: gpg_keys/views.py:250
 msgid "The message does not match the verification message."
 msgstr "Le message ne correspond pas au message de vérification."

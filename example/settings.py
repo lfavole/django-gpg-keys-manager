@@ -85,7 +85,7 @@ WSGI_APPLICATION = "example.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "/tmp/db.sqlite3" if PRODUCTION else BASE_DIR / "db.sqlite3",
+        "NAME": "/tmp/db.sqlite3" if PRODUCTION else BASE_DIR / "db.sqlite3",  # noqa: S108
     }
 }
 

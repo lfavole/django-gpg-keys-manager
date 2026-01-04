@@ -1,0 +1,41 @@
+name: Linting
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+    env:
+      UV_CACHE_DIR: .uv-cache
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install uv
+      run: curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-installer.sh | sh
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: pyproject.toml
+
+    - name: Cache Python dependencies
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.UV_CACHE_DIR }}
+        key: ${{ runner.os }}-uv-linting-${{ hashFiles('**/pyproject.toml') }}
+        restore-keys: ${{ runner.os }}-uv-linting-
+
+    - name: Install dependencies
+      run: uv sync --extra dev
+
+    - name: Run ruff check
+      run: uv run ruff check --output-format github .
+
+    - name: Run ruff format --check
+      run: uv run ruff format --check .
